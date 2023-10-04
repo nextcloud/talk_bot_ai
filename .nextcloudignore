@@ -12,6 +12,7 @@
 /.nextcloudignore
 /.travis.yml
 /.pre-commit-config.yaml
+/.run
 /babel.config.js
 /build
 /APPS.md
