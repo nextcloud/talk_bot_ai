@@ -192,7 +192,7 @@ def talk_bot_app(request: Request) -> TalkBotMessage:
 
 
 def ai_talk_bot_process_request(message: TalkBotMessage):
-    r = re.search(r"@ai\s(.*)", message.object_content["message"], re.IGNORECASE)
+    r = re.search(r"@assistant\s(.*)", message.object_content["message"], re.IGNORECASE)
     if r is None:
         return
     model = pipeline("text2text-generation", model=MODEL_NAME)
@@ -222,7 +222,7 @@ def enabled_handler(enabled: bool, request: Request):
             params = {
                 "name": "AI talk bot example",
                 "route": BOT_URL,
-                "description": "Usage: `@ai What sounds do cats make?`",
+                "description": "Usage: `@assistant What sounds do cats make?`",
             }
             result = ocs_call(method="POST", path="/ocs/v1.php/apps/app_api/api/v1/talk_bot", json_data=params)
             result_dict = json.loads(result.text)["ocs"]["data"]
