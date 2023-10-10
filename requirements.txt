@@ -4,7 +4,4 @@ xmltodict>=0.13
 httpx>=0.24.1
 fastapi>=0.101
 uvicorn[standard]>=0.23.2
-transformers>=4.33
-torch
-torchvision
-torchaudio
+transformers[torch]>=4.33

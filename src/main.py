@@ -25,7 +25,7 @@ from transformers import pipeline
 import uvicorn
 
 APP = FastAPI()
-MODEL_NAME = "MBZUAI/LaMini-Flan-T5-77M"
+MODEL_NAME = "MBZUAI/LaMini-Flan-T5-248M"
 MODEL_INIT_THREAD = None
 BOT_URL = "/ai_talk_bot_example"
 
