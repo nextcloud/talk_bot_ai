@@ -4,14 +4,14 @@
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
-      <env name="PYTHONUNBUFFERED" value="1" />
+      <env name="AE_VERSION" value="1.0.0" />
       <env name="APP_ID" value="talk_bot_ai_example" />
       <env name="APP_PERSISTENT_STORAGE" value="$USER_HOME$/persis_storage" />
-      <env name="APP_PORT" value="9034" />
+      <env name="APP_PORT" value="10034" />
       <env name="APP_SECRET" value="12345" />
       <env name="APP_VERSION" value="1.0.0" />
       <env name="NEXTCLOUD_URL" value="http://nextcloud.local" />
-      <env name="AE_VERSION" value="1.0.0" />
+      <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
     <option name="SDK_HOME" value="" />
     <option name="SDK_NAME" value="Python 3.11 (talk_bot_ai_example)" />

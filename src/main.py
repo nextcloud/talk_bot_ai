@@ -68,6 +68,10 @@ class TalkBotMessage:
         return self._raw_data["target"]["name"]
 
 
+def get_nc_url() -> str:
+    return os.environ["NEXTCLOUD_URL"].removesuffix("/index.php").removesuffix("/")
+
+
 def sign_request(headers: dict, user="") -> None:
     headers["AUTHORIZATION-APP-API"] = b64encode(f"{user}:{os.environ['APP_SECRET']}".encode("UTF=8"))
     headers["EX-APP-ID"] = os.environ["APP_ID"]
@@ -115,7 +119,7 @@ def ocs_call(
     sign_request(headers, kwargs.get("user", ""))
     return httpx.request(
         method,
-        url=os.environ["NEXTCLOUD_URL"] + path,
+        url=get_nc_url() + path,
         params=params,
         content=data_bytes,
         headers=headers,
@@ -155,7 +159,7 @@ def _sign_send_request(method: str, url_suffix: str, data: dict, data_to_sign: s
     }
     return httpx.request(
         method,
-        url=os.environ["NEXTCLOUD_URL"] + "/ocs/v2.php/apps/spreed/api/v1/bot" + url_suffix,
+        url=get_nc_url() + "/ocs/v2.php/apps/spreed/api/v1/bot" + url_suffix,
         json=data,
         headers=headers,
     )
