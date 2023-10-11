@@ -26,6 +26,7 @@ build-push:
 
 .PHONY: deploy
 deploy:
+	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
 	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:deploy talk_bot_ai_example docker_dev \
 		--info-xml https://raw.githubusercontent.com/cloud-py-api/talk_bot_ai_example/main/appinfo/info.xml
 
