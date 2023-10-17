@@ -24,7 +24,7 @@ help:
 .PHONY: build-push
 build-push:
 	docker login ghcr.io
-	docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cloud-py-api/talk_bot_ai_example:1.0.3 --tag ghcr.io/cloud-py-api/talk_bot_ai_example:latest .
+	docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cloud-py-api/talk_bot_ai_example:1.1.0 --tag ghcr.io/cloud-py-api/talk_bot_ai_example:latest .
 
 .PHONY: deploy28
 deploy28:
