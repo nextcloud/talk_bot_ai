@@ -246,7 +246,9 @@ def heartbeat_handler():
 
 def update_progress_status(progress: int):
     ocs_call(
-        method="PUT", path=f"/index.php/apps/app_api/apps/status/{os.environ['APP_ID']}", json={"progress": progress}
+        method="PUT",
+        path=f"/ocs/v1.php/apps/app_api/apps/status/{os.environ['APP_ID']}",
+        json_data={"progress": progress}
     )
 
 
