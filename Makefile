@@ -55,11 +55,11 @@ manual_register28:
 	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
 	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example manual_install --json-info \
   "{\"appid\":\"talk_bot_ai_example\",\"name\":\"TalkBotAI Example\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"host\":\"host.docker.internal\",\"port\":10034,\"scopes\":{\"required\":[\"TALK\", \"TALK_BOT\"],\"optional\":[]},\"protocol\":\"http\",\"system_app\":0}" \
-  -e --force-scopes
+  --force-scopes
 
 .PHONY: manual_register27
 manual_register27:
 	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
 	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example manual_install --json-info \
   "{\"appid\":\"talk_bot_ai_example\",\"name\":\"TalkBotAI Example\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"host\":\"host.docker.internal\",\"port\":10034,\"scopes\":{\"required\":[\"TALK\", \"TALK_BOT\"],\"optional\":[]},\"protocol\":\"http\",\"system_app\":0}" \
-  -e --force-scopes
+  --force-scopes

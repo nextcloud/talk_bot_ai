@@ -196,7 +196,10 @@ def ai_talk_bot_process_request(message: TalkBotMessage):
     r = re.search(r"@assistant\s(.*)", message.object_content["message"], re.IGNORECASE)
     if r is None:
         return
-    model = pipeline("text2text-generation", model=snapshot_download(MODEL_NAME, local_files_only=True))
+    model = pipeline(
+        "text2text-generation",
+        model=snapshot_download(MODEL_NAME, local_files_only=True, cache_dir=os.environ["APP_PERSISTENT_STORAGE"]),
+    )
     response_text = model(r.group(1), max_length=64, do_sample=True)[0]["generated_text"]
     send_message(response_text, message)
 
@@ -255,13 +258,11 @@ def update_progress_status(progress: int):
 def fetch_models_task():
     class TqdmProgress(tqdm.tqdm):
         def display(self, msg=None, pos=None):
-            if init_handler is None:
-                a = min(int(self.n * 100 / self.total), 100)
-                print(a)
-                update_progress_status(a)
+            finish_percent = min(int(self.n * 100 / self.total), 100)
+            update_progress_status(finish_percent)
             return super().display(msg, pos)
 
-    snapshot_download(MODEL_NAME, max_workers=2, cache_dir=os.environ["APP_PERSISTENT_STORAGE"], tqdm_class=TqdmProgress)  # noqa
+    snapshot_download(MODEL_NAME, cache_dir=os.environ["APP_PERSISTENT_STORAGE"], tqdm_class=TqdmProgress)  # noqa
     update_progress_status(100)
 
 
