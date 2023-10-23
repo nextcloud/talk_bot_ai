@@ -23,7 +23,6 @@ from huggingface_hub import snapshot_download
 
 APP = FastAPI()
 MODEL_NAME = "MBZUAI/LaMini-Flan-T5-248M"
-MODEL_INIT_THREAD = None
 BOT_URL = "/ai_talk_bot_example"
 
 

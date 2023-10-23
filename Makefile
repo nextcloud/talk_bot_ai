@@ -16,10 +16,10 @@ help:
 	@echo "  run27             install TalkBotAI for Nextcloud 27"
 	@echo "  "
 	@echo "  For development of this example use PyCharm run configurations. Development is always set for last Nextcloud."
-	@echo "  First run 'TalkBotAI' and then 'make manual_register', after that you can use/debug/develop it and easy test."
+	@echo "  First run 'TalkBotAI' and then 'make register', after that you can use/debug/develop it and easy test."
 	@echo "  "
-	@echo "  manual_register28 perform registration of running 'TalkBotAI' into the 'manual_install' deploy daemon."
-	@echo "  manual_register27 perform registration of running 'TalkBotAI' into the 'manual_install' deploy daemon."
+	@echo "  register28        perform registration of running 'TalkBotAI' into the 'manual_install' deploy daemon."
+	@echo "  register27        perform registration of running 'TalkBotAI' into the 'manual_install' deploy daemon."
 
 .PHONY: build-push
 build-push:
@@ -50,15 +50,15 @@ run27:
 	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example docker_dev -e --force-scopes \
 		--info-xml https://raw.githubusercontent.com/cloud-py-api/talk_bot_ai_example/main/appinfo/info.xml
 
-.PHONY: manual_register28
-manual_register28:
+.PHONY: register28
+register28:
 	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
 	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example manual_install --json-info \
   "{\"appid\":\"talk_bot_ai_example\",\"name\":\"TalkBotAI Example\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"host\":\"host.docker.internal\",\"port\":10034,\"scopes\":{\"required\":[\"TALK\", \"TALK_BOT\"],\"optional\":[]},\"protocol\":\"http\",\"system_app\":0}" \
   --force-scopes
 
-.PHONY: manual_register27
-manual_register27:
+.PHONY: register27
+register27:
 	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
 	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example manual_install --json-info \
   "{\"appid\":\"talk_bot_ai_example\",\"name\":\"TalkBotAI Example\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"host\":\"host.docker.internal\",\"port\":10034,\"scopes\":{\"required\":[\"TALK\", \"TALK_BOT\"],\"optional\":[]},\"protocol\":\"http\",\"system_app\":0}" \
