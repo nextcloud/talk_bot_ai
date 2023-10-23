@@ -10,13 +10,12 @@
       <env name="APP_PORT" value="10034" />
       <env name="APP_SECRET" value="12345" />
       <env name="APP_VERSION" value="1.0.0" />
-      <env name="NEXTCLOUD_URL" value="http://nextcloud.local" />
+      <env name="NEXTCLOUD_URL" value="http://stable27.local" />
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
     <option name="SDK_HOME" value="" />
-    <option name="SDK_NAME" value="Python 3.11 (talk_bot_ai_example)" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    <option name="IS_MODULE_SDK" value="false" />
+    <option name="IS_MODULE_SDK" value="true" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
