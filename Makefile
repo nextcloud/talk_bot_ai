@@ -24,42 +24,42 @@ help:
 .PHONY: build-push
 build-push:
 	docker login ghcr.io
-	docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cloud-py-api/talk_bot_ai_example:1.1.0 --tag ghcr.io/cloud-py-api/talk_bot_ai_example:latest .
+	docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cloud-py-api/talk_bot_ai_example:2.0.0 --tag ghcr.io/cloud-py-api/talk_bot_ai_example:latest .
 
 .PHONY: deploy28
 deploy28:
-	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
-	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:deploy talk_bot_ai_example docker_dev \
+	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent --force || true
+	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:deploy talk_bot_ai_example \
 		--info-xml https://raw.githubusercontent.com/cloud-py-api/talk_bot_ai_example/main/appinfo/info.xml
 
 .PHONY: run28
 run28:
-	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
-	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example docker_dev -e --force-scopes \
+	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent --force || true
+	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example --force-scopes \
 		--info-xml https://raw.githubusercontent.com/cloud-py-api/talk_bot_ai_example/main/appinfo/info.xml
 
 .PHONY: deploy27
 deploy27:
-	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
-	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:deploy talk_bot_ai_example docker_dev \
+	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent --force || true
+	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:deploy talk_bot_ai_example \
 		--info-xml https://raw.githubusercontent.com/cloud-py-api/talk_bot_ai_example/main/appinfo/info.xml
 
 .PHONY: run27
 run27:
-	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
-	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example docker_dev -e --force-scopes \
+	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent --force || true
+	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example --force-scopes \
 		--info-xml https://raw.githubusercontent.com/cloud-py-api/talk_bot_ai_example/main/appinfo/info.xml
 
 .PHONY: register28
 register28:
-	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
+	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent --force || true
 	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example manual_install --json-info \
-  "{\"appid\":\"talk_bot_ai_example\",\"name\":\"TalkBotAI Example\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"host\":\"host.docker.internal\",\"port\":10034,\"scopes\":{\"required\":[\"TALK\", \"TALK_BOT\"],\"optional\":[]},\"protocol\":\"http\",\"system_app\":0}" \
+  "{\"appid\":\"talk_bot_ai_example\",\"name\":\"TalkBotAI Example\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"port\":10034,\"scopes\":{\"required\":[\"TALK\", \"TALK_BOT\"],\"optional\":[]},\"system_app\":0}" \
   --force-scopes --wait-finish
 
 .PHONY: register27
 register27:
-	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent || true
+	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:unregister talk_bot_ai_example --silent --force || true
 	docker exec master-stable27-1 sudo -u www-data php occ app_api:app:register talk_bot_ai_example manual_install --json-info \
-  "{\"appid\":\"talk_bot_ai_example\",\"name\":\"TalkBotAI Example\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"host\":\"host.docker.internal\",\"port\":10034,\"scopes\":{\"required\":[\"TALK\", \"TALK_BOT\"],\"optional\":[]},\"protocol\":\"http\",\"system_app\":0}" \
+  "{\"appid\":\"talk_bot_ai_example\",\"name\":\"TalkBotAI Example\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"port\":10034,\"scopes\":{\"required\":[\"TALK\", \"TALK_BOT\"],\"optional\":[]},\"system_app\":0}" \
   --force-scopes --wait-finish

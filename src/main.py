@@ -23,7 +23,7 @@ from huggingface_hub import snapshot_download
 
 APP = FastAPI()
 MODEL_NAME = "MBZUAI/LaMini-Flan-T5-248M"
-BOT_URL = "/ai_talk_bot_example"
+BOT_URL = "ai_talk_bot_example"
 
 
 @dataclasses.dataclass
@@ -65,7 +65,9 @@ class TalkBotMessage:
 
 
 def get_nc_url() -> str:
-    return os.environ["NEXTCLOUD_URL"].removesuffix("/index.php").removesuffix("/")
+    nc_url = os.environ["NEXTCLOUD_URL"].removesuffix("/index.php").removesuffix("/")
+    print(nc_url)
+    return nc_url
 
 
 def sign_request(headers: dict, user="") -> None:
@@ -177,17 +179,8 @@ def send_message(
     return _sign_send_request("POST", f"/{token}/message", params, message), reference_id
 
 
-def talk_bot_app(request: Request) -> TalkBotMessage:
+def talk_bot_msg(request: Request) -> TalkBotMessage:
     body = asyncio.run(request.body())
-    secret = get_bot_secret(request.url.components.path)
-    if not secret:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    hmac_sign = hmac.new(
-        secret, request.headers.get("X-NEXTCLOUD-TALK-RANDOM", "").encode("UTF-8"), digestmod=hashlib.sha256
-    )
-    hmac_sign.update(body)
-    if request.headers["X-NEXTCLOUD-TALK-SIGNATURE"] != hmac_sign.hexdigest():
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     return TalkBotMessage(json.loads(body))
 
 
@@ -203,11 +196,16 @@ def ai_talk_bot_process_request(message: TalkBotMessage):
     send_message(response_text, message)
 
 
-@APP.post(BOT_URL)
+@APP.post("/" + BOT_URL)
 async def ai_talk_bot(
-    message: Annotated[TalkBotMessage, Depends(talk_bot_app)],
+    message: Annotated[TalkBotMessage, Depends(talk_bot_msg)],
     background_tasks: BackgroundTasks,
+    request: Request
 ):
+    try:
+        sign_check(request)
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     if message.object_name == "message":
         background_tasks.add_task(ai_talk_bot_process_request, message)
     return requests.Response()
@@ -255,13 +253,17 @@ def update_progress_status(progress: int):
 
 
 def fetch_models_task():
+    print("starting model download")
+
     class TqdmProgress(tqdm.tqdm):
         def display(self, msg=None, pos=None):
             finish_percent = min(int(self.n * 100 / self.total), 100)
+            print(f"progress: {finish_percent}")
             update_progress_status(finish_percent)
             return super().display(msg, pos)
 
     snapshot_download(MODEL_NAME, cache_dir=os.environ["APP_PERSISTENT_STORAGE"], tqdm_class=TqdmProgress)  # noqa
+    print(f"progress: 100")
     update_progress_status(100)
 
 
