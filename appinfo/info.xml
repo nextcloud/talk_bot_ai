@@ -15,7 +15,7 @@ It shouldn't be too difficult to use a more advanced model based on this example
 
 Refer to [How to install](https://github.com/cloud-py-api/talk_bot_ai_example/blob/main/HOW_TO_INSTALL.md) to try it.
 	]]></description>
-	<version>2.0.0</version>
+	<version>2.1.0</version>
 	<licence>MIT</licence>
 	<author mail="andrey18106x@gmail.com" homepage="https://github.com/andrey18106">Andrey Borysenko</author>
 	<author mail="bigcat88@icloud.com" homepage="https://github.com/bigcat88">Alexander Piskun</author>
@@ -32,17 +32,12 @@ Refer to [How to install](https://github.com/cloud-py-api/talk_bot_ai_example/bl
 		<docker-install>
 			<registry>ghcr.io</registry>
 			<image>cloud-py-api/talk_bot_ai_example</image>
-			<image-tag>2.0.0</image-tag>
+			<image-tag>2.1.0</image-tag>
 		</docker-install>
 		<scopes>
-			<required>
-				<value>TALK</value>
-				<value>TALK_BOT</value>
-			</required>
-			<optional>
-			</optional>
+			<value>TALK</value>
+			<value>TALK_BOT</value>
 		</scopes>
-		<protocol>http</protocol>
 		<system>false</system>
 	</external-app>
 </info>
