@@ -26,7 +26,7 @@ Refer to [How to install](https://github.com/cloud-py-api/talk_bot_ai_example/bl
 	<bugs>https://github.com/cloud-py-api/talk_bot_ai_example/issues</bugs>
 	<repository type="git">https://github.com/cloud-py-api/talk_bot_ai_example.git</repository>
 	<dependencies>
-		<nextcloud min-version="27" max-version="28"/>
+		<nextcloud min-version="27" max-version="29"/>
 	</dependencies>
 	<external-app>
 		<docker-install>
