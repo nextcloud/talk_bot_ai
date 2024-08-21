@@ -17,12 +17,9 @@ import json
 import requests
 import tqdm
 from fastapi import BackgroundTasks, Depends, FastAPI, responses, Request, HTTPException, status
-from transformers import pipeline
 import uvicorn
-from huggingface_hub import snapshot_download
 
 APP = FastAPI()
-MODEL_NAME = "MBZUAI/LaMini-Flan-T5-248M"
 BOT_URL = "ai_talk_bot_example"
 
 
@@ -188,12 +185,8 @@ def ai_talk_bot_process_request(message: TalkBotMessage):
     r = re.search(r"@assistant\s(.*)", message.object_content["message"], re.IGNORECASE)
     if r is None:
         return
-    model = pipeline(
-        "text2text-generation",
-        model=snapshot_download(MODEL_NAME, local_files_only=True, cache_dir=os.environ["APP_PERSISTENT_STORAGE"]),
-    )
-    response_text = model(r.group(1), max_length=64, do_sample=True)[0]["generated_text"]
-    send_message(response_text, message)
+    send_message("(Talk bot is currently unavailable, please try again later.)", message)
+    return
 
 
 @APP.post("/" + BOT_URL)
@@ -242,35 +235,6 @@ def enabled_handler(enabled: bool, request: Request):
 def heartbeat_handler():
     print("heartbeat_handler: called")
     return responses.JSONResponse(content={"status": "ok"}, status_code=200)
-
-
-def update_progress_status(progress: int):
-    ocs_call(
-        method="PUT",
-        path=f"/ocs/v1.php/apps/app_api/apps/status/{os.environ['APP_ID']}",
-        json_data={"progress": progress}
-    )
-
-
-def fetch_models_task():
-    print("starting model download")
-
-    class TqdmProgress(tqdm.tqdm):
-        def display(self, msg=None, pos=None):
-            finish_percent = min(int(self.n * 100 / self.total), 100)
-            print(f"progress: {finish_percent}")
-            update_progress_status(finish_percent)
-            return super().display(msg, pos)
-
-    snapshot_download(MODEL_NAME, cache_dir=os.environ["APP_PERSISTENT_STORAGE"], tqdm_class=TqdmProgress)  # noqa
-    print(f"progress: 100")
-    update_progress_status(100)
-
-
-@APP.post("/init")
-def init_handler(background_tasks: BackgroundTasks):
-    background_tasks.add_task(fetch_models_task)
-    return responses.JSONResponse(content={}, status_code=200)
 
 
 if __name__ == "__main__":
