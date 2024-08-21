@@ -1,4 +1,4 @@
-"""Example of an application that uses Python Transformers library with Talk Bot APIs."""
+"""Chat bot application that connects the Nextcloud Assistant and Talk Bot APIs."""
 
 import os
 import asyncio
@@ -15,12 +15,11 @@ import hashlib
 import httpx
 import json
 import requests
-import tqdm
 from fastapi import BackgroundTasks, Depends, FastAPI, responses, Request, HTTPException, status
 import uvicorn
 
 APP = FastAPI()
-BOT_URL = "ai_talk_bot_example"
+BOT_URL = "assistant_talk_bot"
 
 
 @dataclasses.dataclass
@@ -214,7 +213,7 @@ def enabled_handler(enabled: bool, request: Request):
     try:
         if enabled:
             params = {
-                "name": "AI talk bot example",
+                "name": "Assistant Talk Bot",
                 "route": BOT_URL,
                 "description": "Usage: `@assistant What sounds do cats make?`",
             }

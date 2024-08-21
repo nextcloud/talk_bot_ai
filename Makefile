@@ -1,31 +1,31 @@
 .DEFAULT_GOAL := help
 
-APP_ID := talk_bot_ai_example
-JSON_INFO := "{\"id\":\"$(APP_ID)\",\"name\":\"TalkBotAI Example\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"port\":10034,\"scopes\":[\"TALK\", \"TALK_BOT\"],\"system\":0}"
+APP_ID := assistant_talk_bot
+JSON_INFO := "{\"id\":\"$(APP_ID)\",\"name\":\"Assistant Talk Bot\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"port\":10034,\"scopes\":[\"TALK\", \"TALK_BOT\"],\"system\":0}"
 
 .PHONY: help
 help:
-	@echo "Welcome to TalkBotAI example. Please use \`make <target>\` where <target> is one of"
+	@echo "Welcome to the Nextcloud Assistant talk bot. Please use \`make <target>\` where <target> is one of"
 	@echo " "
 	@echo "  Next commands are only for dev environment with nextcloud-docker-dev!"
 	@echo "  They should run from the host you are developing on(with activated venv) and not in the container with Nextcloud!"
 	@echo "  "
 	@echo "  build-push        build image and upload to ghcr.io"
 	@echo "  "
-	@echo "  run               install TalkBotAI for Nextcloud Latest"
-	@echo "  run30             install TalkBotAI for Nextcloud 30"
-	@echo "  run29             install TalkBotAI for Nextcloud 29"
-	@echo "  run28             install TalkBotAI for Nextcloud 28"
-	@echo "  run27             install TalkBotAI for Nextcloud 27"
+	@echo "  run               install nextcloud_talk_bot for Nextcloud Latest"
+	@echo "  run30             install nextcloud_talk_bot for Nextcloud 30"
+	@echo "  run29             install nextcloud_talk_bot for Nextcloud 29"
+	@echo "  run28             install nextcloud_talk_bot for Nextcloud 28"
+	@echo "  run27             install nextcloud_talk_bot for Nextcloud 27"
 	@echo "  "
-	@echo "  For development of this example use PyCharm run configurations. Development is always set for last Nextcloud."
-	@echo "  First run 'TalkBotAI' and then 'make register', after that you can use/debug/develop it and easy test."
+	@echo "  For development of this app use PyCharm run configurations. Development is always set for last Nextcloud."
+	@echo "  First run 'nextcloud_talk_bot' and then 'make register', after that you can use/debug/develop it and easy test."
 	@echo "  "
-	@echo "  register          perform registration of running 'TalkBotAI' into the 'manual_install' deploy daemon."
-	@echo "  register30        perform registration of running 'TalkBotAI' into the 'manual_install' deploy daemon."
-	@echo "  register29        perform registration of running 'TalkBotAI' into the 'manual_install' deploy daemon."
-	@echo "  register28        perform registration of running 'TalkBotAI' into the 'manual_install' deploy daemon."
-	@echo "  register27        perform registration of running 'TalkBotAI' into the 'manual_install' deploy daemon."
+	@echo "  register          perform registration of running 'nextcloud_talk_bot' into the 'manual_install' deploy daemon."
+	@echo "  register30        perform registration of running 'nextcloud_talk_bot' into the 'manual_install' deploy daemon."
+	@echo "  register29        perform registration of running 'nextcloud_talk_bot' into the 'manual_install' deploy daemon."
+	@echo "  register28        perform registration of running 'nextcloud_talk_bot' into the 'manual_install' deploy daemon."
+	@echo "  register27        perform registration of running 'nextcloud_talk_bot' into the 'manual_install' deploy daemon."
 
 .PHONY: build-push
 build-push:
