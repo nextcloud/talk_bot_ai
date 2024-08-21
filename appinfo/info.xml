@@ -23,7 +23,7 @@ Refer to [How to install](https://github.com/edward-ly/assistant-talk-bot/blob/m
 	<bugs>https://github.com/edward-ly/assistant-talk-bot/issues</bugs>
 	<repository type="git">https://github.com/edward-ly/assistant-talk-bot.git</repository>
 	<dependencies>
-		<nextcloud min-version="27" max-version="29"/>
+		<nextcloud min-version="30" max-version="31"/>
 	</dependencies>
 	<external-app>
 		<docker-install>
