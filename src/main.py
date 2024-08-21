@@ -4,6 +4,7 @@ import os
 import asyncio
 import dataclasses
 import re
+import time
 from typing import Annotated
 from base64 import b64encode, b64decode
 from random import choice
@@ -181,10 +182,47 @@ def talk_bot_msg(request: Request) -> TalkBotMessage:
 
 
 def ai_talk_bot_process_request(message: TalkBotMessage):
-    r = re.search(r"@assistant\s(.*)", message.object_content["message"], re.IGNORECASE)
-    if r is None:
+    message_text = message.object_content["message"]
+    prompt = re.search(r"@assistant\s(.*)", message_text, re.IGNORECASE)
+
+    if prompt is None:
         return
-    send_message("(Talk bot is currently unavailable, please try again later.)", message)
+
+    params = {
+        "input": {
+            "input": prompt.group(1),
+        },
+        "type": "core:text2text",
+        "appId": BOT_URL,
+    }
+    new_task = ocs_call(method="POST", path="/ocs/v2.php/taskprocessing/schedule", json_data=params)
+    new_task_dict = json.loads(new_task.text)["ocs"]["data"]
+
+    if "message" in new_task_dict:
+        send_message(f"ERROR: unable to send request ({new_task_dict["message"]})", message)
+        return
+
+    task_id = new_task_dict["task"]["id"]
+
+    while True:
+        task = ocs_call(method="GET", path=f"/ocs/v2.php/taskprocessing/task/{task_id}")
+        task_dict = json.loads(task.text)["ocs"]["data"]["task"]
+
+        status = task_dict["status"]
+        if status in ["STATUS_CANCELLED", "STATUS_FAILED", "STATUS_SUCCESSFUL"]:
+            break
+
+        # TODO: replace with TaskProcessing webhook
+        time.sleep(max(task_dict["completionExpectedAt"] - time.time(), 6))
+
+    if status == "STATUS_CANCELLED":
+        return
+
+    if status == "STATUS_FAILED":
+        send_message("ERROR: unable to complete your request, please try again later", message)
+        return
+
+    send_message(task_dict["output"], message)
     return
 
 
