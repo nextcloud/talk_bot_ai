@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-APP_ID := assistant_talk_bot
+APP_ID := talk_bot_ai
 JSON_INFO := "{\"id\":\"$(APP_ID)\",\"name\":\"Assistant Talk Bot\",\"daemon_config_name\":\"manual_install\",\"version\":\"1.0.0\",\"secret\":\"12345\",\"port\":10034,\"scopes\":[\"TALK\", \"TALK_BOT\"],\"system\":0}"
 
 .PHONY: help

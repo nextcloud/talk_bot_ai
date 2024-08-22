@@ -27,7 +27,7 @@ async def lifespan(app: FastAPI):
 
 APP = FastAPI(lifespan=lifespan)
 APP.add_middleware(AppAPIAuthMiddleware)
-BOT_URL = "assistant_talk_bot"
+BOT_URL = "talk_bot_ai"
 AI_BOT = talk_bot.TalkBot("/" + BOT_URL, "Assistant Talk Bot", "Usage: `@assistant What sounds do cats make?`")
 
 
