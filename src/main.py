@@ -1,4 +1,4 @@
-"""Chat bot application that connects the Nextcloud Assistant and Talk Bot APIs."""
+"""Talk bot application that connects the Task Processing and Talk Bot APIs."""
 
 import asyncio
 from contextlib import asynccontextmanager
