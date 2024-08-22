@@ -4,7 +4,6 @@ import os
 import asyncio
 import dataclasses
 import re
-import time
 from typing import Annotated
 from base64 import b64encode, b64decode
 from random import choice
@@ -16,7 +15,7 @@ import hashlib
 import httpx
 import json
 import requests
-from fastapi import BackgroundTasks, Depends, FastAPI, responses, Request, HTTPException, status
+from fastapi import BackgroundTasks, Depends, FastAPI, Query, responses, Request, HTTPException, status
 import uvicorn
 
 APP = FastAPI()
@@ -194,36 +193,39 @@ def ai_talk_bot_process_request(message: TalkBotMessage):
         },
         "type": "core:text2text",
         "appId": BOT_URL,
+        "webhookUri": f"/message?reply_to={message.object_id}&token={message.conversation_token}",
+        "webhookMethod": "AppAPI:" + BOT_URL + ":POST",
     }
-    new_task = ocs_call(method="POST", path="/ocs/v2.php/taskprocessing/schedule", json_data=params)
-    new_task_dict = json.loads(new_task.text)["ocs"]["data"]
+    task = ocs_call(method="POST", path="/ocs/v2.php/taskprocessing/schedule", json_data=params)
+    task_dict = json.loads(task.text)["ocs"]["data"]
 
-    if "message" in new_task_dict:
-        send_message(f"ERROR: unable to send request ({new_task_dict["message"]})", message)
-        return
+    if "message" in task_dict:
+        send_message(f"ERROR: Unable to process request ({task_dict["message"]})", message)
 
-    task_id = new_task_dict["task"]["id"]
-
-    while True:
-        task = ocs_call(method="GET", path=f"/ocs/v2.php/taskprocessing/task/{task_id}")
-        task_dict = json.loads(task.text)["ocs"]["data"]["task"]
-
-        status = task_dict["status"]
-        if status in ["STATUS_CANCELLED", "STATUS_FAILED", "STATUS_SUCCESSFUL"]:
-            break
-
-        # TODO: replace with TaskProcessing webhook
-        time.sleep(max(task_dict["completionExpectedAt"] - time.time(), 6))
-
-    if status == "STATUS_CANCELLED":
-        return
-
-    if status == "STATUS_FAILED":
-        send_message("ERROR: unable to complete your request, please try again later", message)
-        return
-
-    send_message(task_dict["output"], message)
     return
+
+
+@APP.post("/message")
+def message_handler(
+    request: Request,
+    reply_to: Annotated[int, Query(description="ID of message to reply to")],
+    token: Annotated[str, Query(description="Conversation token")]
+):
+    try:
+        sign_check(request)
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    body = asyncio.run(request.body())
+    task = json.loads(body)["task"]
+    status = task["status"]
+    # if status == "STATUS_CANCELLED", do nothing
+    if status == "STATUS_FAILED":
+        send_message("ERROR: Failed to generate message, please try again later", reply_to, token=token)
+    if status == "STATUS_SUCCESSFUL":
+        send_message(task["output"], reply_to, token=token)
+
+    return requests.Response()
 
 
 @APP.post("/" + BOT_URL)
