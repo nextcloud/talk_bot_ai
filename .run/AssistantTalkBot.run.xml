@@ -4,7 +4,7 @@
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
-      <env name="AE_VERSION" value="3.0.0" />
+      <env name="AA_VERSION" value="3.1.0" />
       <env name="APP_ID" value="talk_bot_ai" />
       <env name="APP_PORT" value="10034" />
       <env name="APP_SECRET" value="12345" />
