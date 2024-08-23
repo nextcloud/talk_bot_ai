@@ -1,279 +1,97 @@
-"""Example of an application that uses Python Transformers library with Talk Bot APIs."""
+"""Talk bot application that connects the Task Processing and Talk Bot APIs."""
 
-import os
 import asyncio
-import dataclasses
+from contextlib import asynccontextmanager
+import json
 import re
 from typing import Annotated
-from base64 import b64encode, b64decode
-from random import choice
-from string import ascii_lowercase, ascii_uppercase, digits
-import hmac
-import typing
-import hashlib
 
-import httpx
-import json
-import requests
-import tqdm
-from fastapi import BackgroundTasks, Depends, FastAPI, responses, Request, HTTPException, status
-from transformers import pipeline
-import uvicorn
-from huggingface_hub import snapshot_download
+from fastapi import BackgroundTasks, Depends, FastAPI, Query, Request, responses
 
-APP = FastAPI()
-MODEL_NAME = "MBZUAI/LaMini-Flan-T5-248M"
-BOT_URL = "ai_talk_bot_example"
+from nc_py_api import NextcloudApp, talk_bot
+from nc_py_api.talk_bot import TalkBotMessage
+from nc_py_api.ex_app import (
+    AppAPIAuthMiddleware,
+    atalk_bot_msg,
+    nc_app,
+    run_app,
+    set_handlers,
+)
 
 
-@dataclasses.dataclass
-class TalkBotMessage:
-    def __init__(self, raw_data: dict):
-        self._raw_data = raw_data
-
-    @property
-    def actor_id(self) -> str:
-        return self._raw_data["actor"]["id"]
-
-    @property
-    def actor_display_name(self) -> str:
-        return self._raw_data["actor"]["name"]
-
-    @property
-    def object_id(self) -> int:
-        return self._raw_data["object"]["id"]
-
-    @property
-    def object_name(self) -> str:
-        return self._raw_data["object"]["name"]
-
-    @property
-    def object_content(self) -> dict:
-        return json.loads(self._raw_data["object"]["content"])
-
-    @property
-    def object_media_type(self) -> str:
-        return self._raw_data["object"]["mediaType"]
-
-    @property
-    def conversation_token(self) -> str:
-        return self._raw_data["target"]["id"]
-
-    @property
-    def conversation_name(self) -> str:
-        return self._raw_data["target"]["name"]
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    set_handlers(app, enabled_handler)
+    yield
 
 
-def get_nc_url() -> str:
-    nc_url = os.environ["NEXTCLOUD_URL"].removesuffix("/index.php").removesuffix("/")
-    print(nc_url)
-    return nc_url
+APP = FastAPI(lifespan=lifespan)
+APP.add_middleware(AppAPIAuthMiddleware)
+BOT_URL = "talk_bot_ai"
+AI_BOT = talk_bot.TalkBot("/" + BOT_URL, "Assistant Talk Bot", "Usage: `@assistant What sounds do cats make?`")
 
 
-def sign_request(headers: dict, user="") -> None:
-    headers["AUTHORIZATION-APP-API"] = b64encode(f"{user}:{os.environ['APP_SECRET']}".encode("UTF=8"))
-    headers["EX-APP-ID"] = os.environ["APP_ID"]
-    headers["EX-APP-VERSION"] = os.environ["APP_VERSION"]
-    headers["OCS-APIRequest"] = "true"
+def ai_talk_bot_process_request(message: TalkBotMessage, nc: NextcloudApp):
+    message_text = message.object_content["message"]
+    prompt = re.search(r"@assistant\s(.*)", message_text, re.IGNORECASE)
 
-
-def sign_check(request: Request) -> str:
-    headers = {
-        "AA-VERSION": request.headers["AA-VERSION"],
-        "EX-APP-ID": request.headers["EX-APP-ID"],
-        "EX-APP-VERSION": request.headers["EX-APP-VERSION"],
-        "AUTHORIZATION-APP-API": request.headers.get("AUTHORIZATION-APP-API", ""),
-    }
-    # AA-VERSION contains AppAPI version, for now it can be only one version, so no handling of it.
-    if headers["EX-APP-ID"] != os.environ["APP_ID"]:
-        raise ValueError(f"Invalid EX-APP-ID:{headers['EX-APP-ID']} != {os.environ['APP_ID']}")
-
-    if headers["EX-APP-VERSION"] != os.environ["APP_VERSION"]:
-        raise ValueError(f"Invalid EX-APP-VERSION:{headers['EX-APP-VERSION']} <=> {os.environ['APP_VERSION']}")
-
-    auth_aa = b64decode(headers.get("AUTHORIZATION-APP-API", "")).decode("UTF-8")
-    username, app_secret = auth_aa.split(":", maxsplit=1)
-    if app_secret != os.environ["APP_SECRET"]:
-        raise ValueError(f"Invalid APP_SECRET:{app_secret} != {os.environ['APP_SECRET']}")
-    return username
-
-
-def ocs_call(
-    method: str,
-    path: str,
-    params: typing.Optional[dict] = None,
-    json_data: typing.Optional[typing.Union[dict, list]] = None,
-    **kwargs,
-):
-    method = method.upper()
-    if params is None:
-        params = {}
-    params.update({"format": "json"})
-    headers = kwargs.pop("headers", {})
-    data_bytes = None
-    if json_data is not None:
-        headers.update({"Content-Type": "application/json"})
-        data_bytes = json.dumps(json_data).encode("utf-8")
-    sign_request(headers, kwargs.get("user", ""))
-    return httpx.request(
-        method,
-        url=get_nc_url() + path,
-        params=params,
-        content=data_bytes,
-        headers=headers,
-    )
-
-
-def random_string(size: int) -> str:
-    return "".join(choice(ascii_lowercase + ascii_uppercase + digits) for _ in range(size))
-
-
-def get_bot_secret(callback_url: str) -> bytes:
-    sha_1 = hashlib.sha1(usedforsecurity=False)
-    string_to_hash = os.environ["APP_ID"] + "_" + callback_url
-    sha_1.update(string_to_hash.encode("UTF-8"))
-    secret_key = sha_1.hexdigest()
-    if secret_key in os.environ:
-        return os.environ[secret_key].encode("UTF-8")
-    data = {"configKeys": [secret_key]}
-    results = ocs_call(
-        method="POST", path=f"/ocs/v1.php/apps/app_api/api/v1/ex-app/config/get-values", json_data=data
-    )
-    r = json.loads(results.text)["ocs"]["data"]
-    secret_value = r[0]["configvalue"]
-    os.environ[secret_key] = secret_value
-    return secret_value.encode("UTF-8")
-
-
-def _sign_send_request(method: str, url_suffix: str, data: dict, data_to_sign: str) -> httpx.Response:
-    secret = get_bot_secret(BOT_URL)
-    talk_bot_random = random_string(32)
-    hmac_sign = hmac.new(secret, talk_bot_random.encode("UTF-8"), digestmod=hashlib.sha256)
-    hmac_sign.update(data_to_sign.encode("UTF-8"))
-    headers = {
-        "X-Nextcloud-Talk-Bot-Random": talk_bot_random,
-        "X-Nextcloud-Talk-Bot-Signature": hmac_sign.hexdigest(),
-        "OCS-APIRequest": "true",
-    }
-    return httpx.request(
-        method,
-        url=get_nc_url() + "/ocs/v2.php/apps/spreed/api/v1/bot" + url_suffix,
-        json=data,
-        headers=headers,
-    )
-
-
-def send_message(
-    message: str, reply_to_message: typing.Union[int, TalkBotMessage], silent: bool = False, token: str = ""
-) -> tuple[httpx.Response, str]:
-    if not token and not isinstance(reply_to_message, TalkBotMessage):
-        raise ValueError("Either specify 'token' value or provide 'TalkBotMessage'.")
-    token = reply_to_message.conversation_token if isinstance(reply_to_message, TalkBotMessage) else token
-    reference_id = hashlib.sha256(random_string(32).encode("UTF-8")).hexdigest()
-    params = {
-        "message": message,
-        "replyTo": reply_to_message.object_id if isinstance(reply_to_message, TalkBotMessage) else reply_to_message,
-        "referenceId": reference_id,
-        "silent": silent,
-    }
-    return _sign_send_request("POST", f"/{token}/message", params, message), reference_id
-
-
-def talk_bot_msg(request: Request) -> TalkBotMessage:
-    body = asyncio.run(request.body())
-    return TalkBotMessage(json.loads(body))
-
-
-def ai_talk_bot_process_request(message: TalkBotMessage):
-    r = re.search(r"@assistant\s(.*)", message.object_content["message"], re.IGNORECASE)
-    if r is None:
+    if prompt is None:
         return
-    model = pipeline(
-        "text2text-generation",
-        model=snapshot_download(MODEL_NAME, local_files_only=True, cache_dir=os.environ["APP_PERSISTENT_STORAGE"]),
-    )
-    response_text = model(r.group(1), max_length=64, do_sample=True)[0]["generated_text"]
-    send_message(response_text, message)
+
+    params = {
+        "input": {
+            "input": prompt.group(1),
+        },
+        "type": "core:text2text",
+        "appId": BOT_URL,
+        "webhookUri": f"/message?reply_to={message.object_id}&token={message.conversation_token}",
+        "webhookMethod": "AppAPI:" + BOT_URL + ":POST",
+    }
+    schedule = nc.ocs(method="POST", path="/ocs/v2.php/taskprocessing/schedule", json=params)
+
+    if "message" in schedule:
+        AI_BOT.send_message(f"ERROR: Unable to process request ({schedule["message"]})", message)
+
+    return
+
+
+@APP.post("/message")
+def message_handler(
+    request: Request,
+    reply_to: Annotated[int, Query(description="ID of message to reply to")],
+    token: Annotated[str, Query(description="Conversation token")]
+):
+    body = asyncio.run(request.body())
+    task = json.loads(body)["task"]
+    status = task["status"]
+    # if status == "STATUS_CANCELLED", do nothing
+    if status == "STATUS_FAILED":
+        AI_BOT.send_message("ERROR: Failed to generate message, please try again later", reply_to, token=token)
+    if status == "STATUS_SUCCESSFUL":
+        AI_BOT.send_message(task["output"], reply_to, token=token)
+
+    return responses.Response()
 
 
 @APP.post("/" + BOT_URL)
 async def ai_talk_bot(
-    message: Annotated[TalkBotMessage, Depends(talk_bot_msg)],
+    message: Annotated[TalkBotMessage, Depends(atalk_bot_msg)],
+    nc: Annotated[NextcloudApp, Depends(nc_app)],
     background_tasks: BackgroundTasks,
-    request: Request
 ):
-    try:
-        sign_check(request)
-    except ValueError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     if message.object_name == "message":
-        background_tasks.add_task(ai_talk_bot_process_request, message)
-    return requests.Response()
+        background_tasks.add_task(ai_talk_bot_process_request, message, nc)
+    return responses.Response()
 
 
-@APP.put("/enabled")
-def enabled_handler(enabled: bool, request: Request):
-    try:
-        sign_check(request)
-    except ValueError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+def enabled_handler(enabled: bool, nc: NextcloudApp):
     print(f"enabled={enabled}")
     try:
-        if enabled:
-            params = {
-                "name": "AI talk bot example",
-                "route": BOT_URL,
-                "description": "Usage: `@assistant What sounds do cats make?`",
-            }
-            result = ocs_call(method="POST", path="/ocs/v1.php/apps/app_api/api/v1/talk_bot", json_data=params)
-            result_dict = json.loads(result.text)["ocs"]["data"]
-            os.environ[result_dict["id"]] = result_dict["secret"]
-        else:
-            ocs_call(
-                method="DELETE", path="/ocs/v1.php/apps/app_api/api/v1/talk_bot", json_data={"route": BOT_URL}
-            )
-        r = ""
+        AI_BOT.enabled_handler(enabled, nc)
     except Exception as e:
-        r = str(e)
-    return responses.JSONResponse(content={"error": r}, status_code=200)
-
-
-@APP.get("/heartbeat")
-def heartbeat_handler():
-    print("heartbeat_handler: called")
-    return responses.JSONResponse(content={"status": "ok"}, status_code=200)
-
-
-def update_progress_status(progress: int):
-    ocs_call(
-        method="PUT",
-        path=f"/ocs/v1.php/apps/app_api/apps/status/{os.environ['APP_ID']}",
-        json_data={"progress": progress}
-    )
-
-
-def fetch_models_task():
-    print("starting model download")
-
-    class TqdmProgress(tqdm.tqdm):
-        def display(self, msg=None, pos=None):
-            finish_percent = min(int(self.n * 100 / self.total), 100)
-            print(f"progress: {finish_percent}")
-            update_progress_status(finish_percent)
-            return super().display(msg, pos)
-
-    snapshot_download(MODEL_NAME, cache_dir=os.environ["APP_PERSISTENT_STORAGE"], tqdm_class=TqdmProgress)  # noqa
-    print(f"progress: 100")
-    update_progress_status(100)
-
-
-@APP.post("/init")
-def init_handler(background_tasks: BackgroundTasks):
-    background_tasks.add_task(fetch_models_task)
-    return responses.JSONResponse(content={}, status_code=200)
+        return str(e)
+    return ""
 
 
 if __name__ == "__main__":
-    uvicorn.run(
-        "main:APP", host=os.environ.get("APP_HOST", "127.0.0.1"), port=int(os.environ["APP_PORT"]), log_level="trace"
-    )
+    run_app("main:APP", log_level="trace")

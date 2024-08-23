@@ -1,38 +1,35 @@
 <?xml version="1.0"?>
 <info>
-	<id>talk_bot_ai_example</id>
-	<name>TalkBotAI Example</name>
-	<summary>Nextcloud TalkBotAI Example</summary>
+	<id>talk_bot_ai</id>
+	<name>Assistant Talk Bot</name>
+	<summary>Nextcloud Assistant Talk Bot</summary>
 	<description>
 	<![CDATA[
-**Demonstration of using [`AppAPI`](https://github.com/cloud-py-api/app_api) and Talk Bot API.**
+**A talk bot using [`AppAPI`](https://github.com/cloud-py-api/app_api), Task Processing API, and Talk Bot API.**
 
-The bot is capable of stupidly answering questions in chat.
+The bot is capable of answering questions in chat depending on the model set by Nextcloud Assistant.
 
-This application is an example, the language model used in it is microscopic, which is ideal for an example.
-
-It shouldn't be too difficult to use a more advanced model based on this example and release a full-fledged application.
-
-Refer to [How to install](https://github.com/cloud-py-api/talk_bot_ai_example/blob/main/HOW_TO_INSTALL.md) to try it.
+Refer to [How to install](https://github.com/edward-ly/talk_bot_ai/blob/main/HOW_TO_INSTALL.md) to install the application.
 	]]></description>
-	<version>2.1.0</version>
+	<version>1.0.0</version>
 	<licence>MIT</licence>
 	<author mail="andrey18106x@gmail.com" homepage="https://github.com/andrey18106">Andrey Borysenko</author>
 	<author mail="bigcat88@icloud.com" homepage="https://github.com/bigcat88">Alexander Piskun</author>
-	<namespace>TalkBotAIExample</namespace>
+	<author mail="contact@edward.ly" homepage="https://github.com/edward-ly">Edward Ly</author>
+	<namespace>AssistantTalkBot</namespace>
 	<category>tools</category>
-	<screenshot>https://raw.githubusercontent.com/cloud-py-api/talk_bot_ai_example/main/screenshots/talk_bot_ai.png</screenshot>
-	<website>https://github.com/cloud-py-api/talk_bot_ai_example</website>
-	<bugs>https://github.com/cloud-py-api/talk_bot_ai_example/issues</bugs>
-	<repository type="git">https://github.com/cloud-py-api/talk_bot_ai_example.git</repository>
+	<screenshot>https://raw.githubusercontent.com/edward-ly/talk_bot_ai/main/screenshots/talk_bot_ai.png</screenshot>
+	<website>https://github.com/edward-ly/talk_bot_ai</website>
+	<bugs>https://github.com/edward-ly/talk_bot_ai/issues</bugs>
+	<repository type="git">https://github.com/edward-ly/talk_bot_ai.git</repository>
 	<dependencies>
-		<nextcloud min-version="27" max-version="29"/>
+		<nextcloud min-version="30" max-version="31"/>
 	</dependencies>
 	<external-app>
 		<docker-install>
 			<registry>ghcr.io</registry>
-			<image>cloud-py-api/talk_bot_ai_example</image>
-			<image-tag>2.1.0</image-tag>
+			<image>edward-ly/talk_bot_ai</image>
+			<image-tag>1.0.0</image-tag>
 		</docker-install>
 		<scopes>
 			<value>TALK</value>

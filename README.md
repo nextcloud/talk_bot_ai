@@ -1,11 +1,7 @@
-## Nextcloud Talk Bot
+## Nextcloud Assistant Talk Bot
 
-Demonstration of using [AppAPI](https://github.com/cloud-py-api/app_api) and Talk Bot API.
+**A talk bot using [`AppAPI`](https://github.com/cloud-py-api/app_api), Task Processing API, and Talk Bot API.**
 
-The bot is capable of stupidly answering questions in chat.
+The bot is capable of answering questions in chat depending on the model set by Nextcloud Assistant.
 
-This application is an example, the language model used in it is microscopic, which is ideal for an example.
-
-It shouldn't be too difficult to use a more advanced model based on this example and release a full-fledged application.
-
-Refer to [How to install](https://github.com/cloud-py-api/talk_bot_ai_example/blob/main/HOW_TO_INSTALL.md) to try it.
+Refer to [How to install](https://github.com/edward-ly/talk_bot_ai/blob/main/HOW_TO_INSTALL.md) to install the application.

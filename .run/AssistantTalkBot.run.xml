@@ -1,12 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="TalkBotAI" type="PythonConfigurationType" factoryName="Python">
-    <module name="talk_bot_ai_example" />
+  <configuration default="false" name="AssistantTalkBot" type="PythonConfigurationType" factoryName="Python">
+    <module name="talk_bot_ai" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
       <env name="AE_VERSION" value="1.0.0" />
-      <env name="APP_ID" value="talk_bot_ai_example" />
-      <env name="APP_PERSISTENT_STORAGE" value="$USER_HOME$/persis_storage" />
+      <env name="APP_ID" value="talk_bot_ai" />
       <env name="APP_PORT" value="10034" />
       <env name="APP_SECRET" value="12345" />
       <env name="APP_VERSION" value="1.0.0" />
