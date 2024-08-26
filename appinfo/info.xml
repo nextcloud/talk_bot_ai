@@ -9,27 +9,27 @@
 
 The bot is capable of answering questions in chat depending on the model set by Nextcloud Assistant.
 
-Refer to [How to install](https://github.com/edward-ly/talk_bot_ai/blob/main/HOW_TO_INSTALL.md) to install the application.
+Refer to [How to install](https://github.com/cloud-py-api/talk_bot_ai/blob/main/HOW_TO_INSTALL.md) to install the application.
 	]]></description>
-	<version>1.0.0</version>
+	<version>3.0.0</version>
 	<licence>MIT</licence>
 	<author mail="andrey18106x@gmail.com" homepage="https://github.com/andrey18106">Andrey Borysenko</author>
 	<author mail="bigcat88@icloud.com" homepage="https://github.com/bigcat88">Alexander Piskun</author>
 	<author mail="contact@edward.ly" homepage="https://github.com/edward-ly">Edward Ly</author>
 	<namespace>AssistantTalkBot</namespace>
 	<category>tools</category>
-	<screenshot>https://raw.githubusercontent.com/edward-ly/talk_bot_ai/main/screenshots/talk_bot_ai.png</screenshot>
-	<website>https://github.com/edward-ly/talk_bot_ai</website>
-	<bugs>https://github.com/edward-ly/talk_bot_ai/issues</bugs>
-	<repository type="git">https://github.com/edward-ly/talk_bot_ai.git</repository>
+	<screenshot>https://raw.githubusercontent.com/cloud-py-api/talk_bot_ai/main/screenshots/talk_bot_ai.png</screenshot>
+	<website>https://github.com/cloud-py-api/talk_bot_ai</website>
+	<bugs>https://github.com/cloud-py-api/talk_bot_ai/issues</bugs>
+	<repository type="git">https://github.com/cloud-py-api/talk_bot_ai.git</repository>
 	<dependencies>
 		<nextcloud min-version="30" max-version="31"/>
 	</dependencies>
 	<external-app>
 		<docker-install>
 			<registry>ghcr.io</registry>
-			<image>edward-ly/talk_bot_ai</image>
-			<image-tag>1.0.0</image-tag>
+			<image>cloud-py-api/talk_bot_ai</image>
+			<image-tag>3.0.0</image-tag>
 		</docker-install>
 		<scopes>
 			<value>TALK</value>
