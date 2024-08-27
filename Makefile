@@ -26,6 +26,7 @@ help:
 .PHONY: build-push
 build-push:
 	docker login ghcr.io
+	docker buildx create --name $(APP_ID) --driver docker-container --platform linux/amd64,linux/arm64/v8 --use || true
 	docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cloud-py-api/$(APP_ID):$(APP_VERSION) --tag ghcr.io/cloud-py-api/$(APP_ID):latest .
 
 .PHONY: run
