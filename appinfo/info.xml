@@ -32,8 +32,7 @@ Refer to [How to install](https://github.com/cloud-py-api/talk_bot_ai/blob/main/
 			<image-tag>3.0.0</image-tag>
 		</docker-install>
 		<scopes>
-			<value>TALK</value>
-			<value>TALK_BOT</value>
+			<value>ALL</value>
 		</scopes>
 		<system>false</system>
 	</external-app>
