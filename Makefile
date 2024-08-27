@@ -3,7 +3,7 @@
 APP_ID := talk_bot_ai
 APP_NAME := AssistantTalkBot
 APP_VERSION := 3.0.0
-JSON_INFO := "{\"id\":\"$(APP_ID)\",\"name\":\"Assistant Talk Bot\",\"daemon_config_name\":\"manual_install\",\"version\":\"$(APP_VERSION)\",\"secret\":\"12345\",\"port\":10034,\"scopes\":[\"TALK\", \"TALK_BOT\"]}"
+JSON_INFO := "{\"id\":\"$(APP_ID)\",\"name\":\"Assistant Talk Bot\",\"daemon_config_name\":\"manual_install\",\"version\":\"$(APP_VERSION)\",\"secret\":\"12345\",\"port\":10034,\"scopes\":[\"ALL\"]}"
 
 .PHONY: help
 help:
