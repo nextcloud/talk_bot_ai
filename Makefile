@@ -3,7 +3,7 @@
 APP_ID := talk_bot_ai
 APP_NAME := AssistantTalkBot
 APP_VERSION := 3.0.0
-JSON_INFO := "{\"id\":\"$(APP_ID)\",\"name\":\"Assistant Talk Bot\",\"daemon_config_name\":\"manual_install\",\"version\":\"$(APP_VERSION)\",\"secret\":\"12345\",\"port\":10034,\"scopes\":[\"ALL\"]}"
+JSON_INFO := "{\"id\":\"$(APP_ID)\",\"name\":\"$(APP_NAME)\",\"daemon_config_name\":\"manual_install\",\"version\":\"$(APP_VERSION)\",\"secret\":\"12345\",\"port\":10034}"
 
 .PHONY: help
 help:
@@ -27,26 +27,26 @@ help:
 build-push:
 	docker login ghcr.io
 	docker buildx create --name $(APP_ID) --driver docker-container --platform linux/amd64,linux/arm64/v8 --use || true
-	docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/cloud-py-api/$(APP_ID):$(APP_VERSION) --tag ghcr.io/cloud-py-api/$(APP_ID):latest .
+	docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag ghcr.io/nextcloud/$(APP_ID):$(APP_VERSION) --tag ghcr.io/nextcloud/$(APP_ID):latest .
 
 .PHONY: run
 run:
 	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister $(APP_ID) --silent --force || true
-	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:register $(APP_ID) --force-scopes \
-		--info-xml https://raw.githubusercontent.com/cloud-py-api/$(APP_ID)/main/appinfo/info.xml
+	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:register $(APP_ID) \
+		--info-xml https://raw.githubusercontent.com/nextcloud/$(APP_ID)/main/appinfo/info.xml
 
 .PHONY: run30
 run30:
 	docker exec master-stable30-1 sudo -u www-data php occ app_api:app:unregister $(APP_ID) --silent --force || true
-	docker exec master-stable30-1 sudo -u www-data php occ app_api:app:register $(APP_ID) --force-scopes \
-		--info-xml https://raw.githubusercontent.com/cloud-py-api/$(APP_ID)/main/appinfo/info.xml
+	docker exec master-stable30-1 sudo -u www-data php occ app_api:app:register $(APP_ID) \
+		--info-xml https://raw.githubusercontent.com/nextcloud/$(APP_ID)/main/appinfo/info.xml
 
 .PHONY: register
 register:
 	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister $(APP_ID) --silent --force || true
-	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:register $(APP_ID) manual_install --json-info $(JSON_INFO) --force-scopes --wait-finish
+	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:register $(APP_ID) manual_install --json-info $(JSON_INFO) --wait-finish
 
 .PHONY: register30
 register30:
 	docker exec master-stable30-1 sudo -u www-data php occ app_api:app:unregister $(APP_ID) --silent --force || true
-	docker exec master-stable30-1 sudo -u www-data php occ app_api:app:register $(APP_ID) manual_install --json-info $(JSON_INFO) --force-scopes --wait-finish
+	docker exec master-stable30-1 sudo -u www-data php occ app_api:app:register $(APP_ID) manual_install --json-info $(JSON_INFO) --wait-finish

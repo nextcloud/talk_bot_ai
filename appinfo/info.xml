@@ -5,11 +5,11 @@
 	<summary>Nextcloud Assistant Talk Bot</summary>
 	<description>
 	<![CDATA[
-**A talk bot using [`AppAPI`](https://github.com/cloud-py-api/app_api), Task Processing API, and Talk Bot API.**
+**A talk bot using [`AppAPI`](https://github.com/nextcloud/app_api), Task Processing API, and Talk Bot API.**
 
 The bot is capable of answering questions in chat depending on the model set by Nextcloud Assistant.
 
-Refer to [How to install](https://github.com/cloud-py-api/talk_bot_ai/blob/main/HOW_TO_INSTALL.md) to install the application.
+Refer to [How to install](https://github.com/nextcloud/talk_bot_ai/blob/main/HOW_TO_INSTALL.md) to install the application.
 	]]></description>
 	<version>3.0.0</version>
 	<licence>MIT</licence>
@@ -18,22 +18,18 @@ Refer to [How to install](https://github.com/cloud-py-api/talk_bot_ai/blob/main/
 	<author mail="contact@edward.ly" homepage="https://github.com/edward-ly">Edward Ly</author>
 	<namespace>AssistantTalkBot</namespace>
 	<category>tools</category>
-	<screenshot>https://raw.githubusercontent.com/cloud-py-api/talk_bot_ai/main/screenshots/talk_bot_ai.png</screenshot>
-	<website>https://github.com/cloud-py-api/talk_bot_ai</website>
-	<bugs>https://github.com/cloud-py-api/talk_bot_ai/issues</bugs>
-	<repository type="git">https://github.com/cloud-py-api/talk_bot_ai.git</repository>
+	<screenshot>https://raw.githubusercontent.com/nextcloud/talk_bot_ai/main/screenshots/talk_bot_ai.png</screenshot>
+	<website>https://github.com/nextcloud/talk_bot_ai</website>
+	<bugs>https://github.com/nextcloud/talk_bot_ai/issues</bugs>
+	<repository type="git">https://github.com/nextcloud/talk_bot_ai.git</repository>
 	<dependencies>
 		<nextcloud min-version="30" max-version="31"/>
 	</dependencies>
 	<external-app>
 		<docker-install>
 			<registry>ghcr.io</registry>
-			<image>cloud-py-api/talk_bot_ai</image>
+			<image>nextcloud/talk_bot_ai</image>
 			<image-tag>3.0.0</image-tag>
 		</docker-install>
-		<scopes>
-			<value>ALL</value>
-		</scopes>
-		<system>false</system>
 	</external-app>
 </info>
