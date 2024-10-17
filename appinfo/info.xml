@@ -8,8 +8,8 @@
 **A talk bot using [`AppAPI`](https://github.com/nextcloud/app_api), Task Processing API, and Talk Bot API.**
 
 The bot is capable of answering questions in chat depending on the model set by Nextcloud Assistant.
-
-Refer to [How to install](https://github.com/nextcloud/talk_bot_ai/blob/main/HOW_TO_INSTALL.md) to install the application.
+.
+**The [`AppAPI`](https://github.com/nextcloud/app_api) application needs to be enabled to install and use this bot.**
 	]]></description>
 	<version>3.0.0</version>
 	<licence>MIT</licence>
