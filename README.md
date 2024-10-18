@@ -7,7 +7,7 @@
 
 The bot answers questions in chat based on the model set by Nextcloud Assistant.
 
-## Hot to install:
+## How to install:
 
 1. Set up a deployment daemon by following the [AppAPI instructions](https://nextcloud.github.io/app_api/CreationOfDeployDaemon.html). _(Automatically created with AIO)_
 2. Go to the `Apps` menu in Nextcloud, find this app, and click `Deploy and Enable`.
