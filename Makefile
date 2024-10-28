@@ -19,7 +19,7 @@ help:
 	@echo "  run               installs $(APP_NAME) for Nextcloud Latest"
 	@echo "  run30             installs $(APP_NAME) for Nextcloud 30"
 	@echo " "
-	@echo "  > Commands for manual registration of ExApp($(APP_NAME) should be running!):"
+	@echo "  > Commands for manual registration of ExApp ($(APP_NAME) should be running!):"
 	@echo " "
 	@echo "  register          performs registration of running $(APP_NAME) into the 'manual_install' deploy daemon."
 	@echo "  register30        performs registration of running $(APP_NAME) into the 'manual_install' deploy daemon."
