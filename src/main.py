@@ -68,7 +68,7 @@ def message_handler(
     if status == "STATUS_FAILED":
         AI_BOT.send_message("ERROR: Failed to generate message, please try again later", reply_to, token=token)
     if status == "STATUS_SUCCESSFUL":
-        AI_BOT.send_message(task["output"], reply_to, token=token)
+        AI_BOT.send_message(task["output"]["output"], reply_to, token=token)
 
     return responses.Response()
 
