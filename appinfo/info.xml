@@ -11,7 +11,7 @@ The bot is capable of answering questions in chat depending on the model set by 
 
 **The [`AppAPI`](https://github.com/nextcloud/app_api) application needs to be enabled to install and use this bot.**
 	]]></description>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<licence>MIT</licence>
 	<author mail="andrey18106x@gmail.com" homepage="https://github.com/andrey18106">Andrey Borysenko</author>
 	<author mail="bigcat88@icloud.com" homepage="https://github.com/bigcat88">Alexander Piskun</author>
@@ -29,7 +29,7 @@ The bot is capable of answering questions in chat depending on the model set by 
 		<docker-install>
 			<registry>ghcr.io</registry>
 			<image>nextcloud/talk_bot_ai</image>
-			<image-tag>3.0.0</image-tag>
+			<image-tag>3.0.1</image-tag>
 		</docker-install>
 	</external-app>
 </info>
