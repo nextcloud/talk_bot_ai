@@ -33,7 +33,7 @@ AI_BOT = talk_bot.TalkBot("/" + BOT_URL, "Assistant Talk Bot", "Usage: `@assista
 
 def ai_talk_bot_process_request(message: TalkBotMessage, nc: NextcloudApp):
     message_text = message.object_content["message"]
-    prompt = re.search(r"@assistant\s(.*)", message_text, re.IGNORECASE)
+    prompt = re.search(r"@assistant\s+(.*)\s*", message_text, re.IGNORECASE | re.DOTALL)
 
     if prompt is None:
         return
