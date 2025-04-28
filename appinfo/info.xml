@@ -17,6 +17,7 @@ The bot is capable of answering questions in chat depending on the model set by 
 	<author mail="bigcat88@icloud.com" homepage="https://github.com/bigcat88">Alexander Piskun</author>
 	<author mail="contact@edward.ly" homepage="https://github.com/edward-ly">Edward Ly</author>
 	<namespace>AssistantTalkBot</namespace>
+	<category>ai</category>
 	<category>tools</category>
 	<screenshot>https://raw.githubusercontent.com/nextcloud/talk_bot_ai/main/screenshots/talk_bot_ai.png</screenshot>
 	<website>https://github.com/nextcloud/talk_bot_ai</website>
