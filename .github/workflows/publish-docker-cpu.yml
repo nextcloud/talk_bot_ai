@@ -37,7 +37,7 @@ jobs:
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
         # Skip if no package.json
         if: ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
@@ -87,7 +87,7 @@ jobs:
           echo "Extracted version: ${{ env.VERSION }}"
 
       - name: Build container image
-        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6.15.0 # zizmor: ignore[cache-poisoning]
+        uses: docker/build-push-action@14487ce63c7a62a4a324b0bfb37086795e31c6c1 # v6.16.0 # zizmor: ignore[cache-poisoning]
         with:
           push: true
           context: ./${{ env.APP_NAME }}
