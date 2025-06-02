@@ -87,7 +87,7 @@ jobs:
           echo "Extracted version: ${{ env.VERSION }}"
 
       - name: Build container image
-        uses: docker/build-push-action@14487ce63c7a62a4a324b0bfb37086795e31c6c1 # v6.16.0 # zizmor: ignore[cache-poisoning]
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.16.0 # zizmor: ignore[cache-poisoning]
         with:
           push: true
           context: ./${{ env.APP_NAME }}
