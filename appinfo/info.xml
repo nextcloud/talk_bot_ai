@@ -9,11 +9,11 @@
 	<summary>Nextcloud Assistant Talk Bot</summary>
 	<description>
 	<![CDATA[
-**A talk bot using [`AppAPI`](https://github.com/nextcloud/app_api), Task Processing API, and Talk Bot API.**
+**A talk bot using [`AppAPI`](https://github.com/nextcloud/app_api), the [OCS TaskProcessing API](https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/ocs-taskprocessing-api.html), and [Talk Bot API](https://cloud-py-api.github.io/nc_py_api/reference/TalkBot.html).**
 
-The bot is capable of answering questions in chat depending on the model set by Nextcloud Assistant.
+The bot is capable of answering questions in Nextcloud Talk chat conversations using the large language model set by Nextcloud Assistant.
 
-**The [`AppAPI`](https://github.com/nextcloud/app_api) application needs to be enabled to install and use this bot.**
+**The [`AppAPI`](https://apps.nextcloud.com/apps/app_api), [Nextcloud Talk](https://apps.nextcloud.com/apps/spreed), and [Nextcloud Assistant](https://apps.nextcloud.com/apps/assistant) apps needs to be enabled to install and use this bot.**
 	]]></description>
 	<version>3.0.2</version>
 	<licence>agpl</licence>
