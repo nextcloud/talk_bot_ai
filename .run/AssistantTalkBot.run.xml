@@ -9,7 +9,7 @@
       <env name="APP_PORT" value="10034" />
       <env name="APP_SECRET" value="12345" />
       <env name="APP_VERSION" value="3.0.2" />
-      <env name="NEXTCLOUD_URL" value="http://stable30.local" />
+      <env name="NEXTCLOUD_URL" value="http://stable31.local" />
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
     <option name="SDK_HOME" value="" />
