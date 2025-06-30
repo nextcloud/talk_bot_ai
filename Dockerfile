@@ -25,7 +25,7 @@ RUN set -ex; \
     rm -rf /tmp/frp /tmp/frp.tar.gz
 
 COPY requirements.txt /
-COPY healthcheck.sh /
+COPY --chmod=775 healthcheck.sh /
 COPY --chmod=775 start.sh /
 ADD /src/ /app/
 
