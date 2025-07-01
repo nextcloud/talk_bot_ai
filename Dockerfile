@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023-2025 Nextcloud GmbH and Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-FROM python:3.12-bookworm
+FROM python:3.12-slim-bookworm
 
 RUN \
   apt-get update && \
@@ -25,7 +25,7 @@ RUN set -ex; \
     rm -rf /tmp/frp /tmp/frp.tar.gz
 
 COPY requirements.txt /
-COPY healthcheck.sh /
+COPY --chmod=775 healthcheck.sh /
 COPY --chmod=775 start.sh /
 ADD /src/ /app/
 
