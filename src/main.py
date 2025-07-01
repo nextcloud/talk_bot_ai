@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2023-2025 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """Talk bot application that connects the Task Processing and Talk Bot APIs."""
 
 import asyncio
