@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2024-2025 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+version = 1
+SPDX-PackageName = "talk_bot_ai"
+SPDX-PackageSupplier = "Nextcloud <info@nextcloud.com>"
+SPDX-PackageDownloadLocation = "https://github.com/nextcloud/talk_bot_ai/"
+
+[[annotations]]
+path = [".run/*.xml", ".gitignore", ".idea/.gitignore", ".nextcloudignore", "krankerl.toml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "screenshots/talk_bot_ai.png"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "CC0-1.0"

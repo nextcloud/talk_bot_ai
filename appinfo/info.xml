@@ -1,4 +1,8 @@
 <?xml version="1.0"?>
+<!--
+  - SPDX-FileCopyrightText: 2023-2025 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <info>
 	<id>talk_bot_ai</id>
 	<name>Assistant Talk Bot</name>
@@ -12,7 +16,7 @@ The bot is capable of answering questions in chat depending on the model set by 
 **The [`AppAPI`](https://github.com/nextcloud/app_api) application needs to be enabled to install and use this bot.**
 	]]></description>
 	<version>3.0.2</version>
-	<licence>MIT</licence>
+	<licence>agpl</licence>
 	<author mail="andrey18106x@gmail.com" homepage="https://github.com/andrey18106">Andrey Borysenko</author>
 	<author mail="bigcat88@icloud.com" homepage="https://github.com/bigcat88">Alexander Piskun</author>
 	<author mail="contact@edward.ly" homepage="https://github.com/edward-ly">Edward Ly</author>
