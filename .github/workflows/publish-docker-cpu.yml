@@ -4,16 +4,18 @@
 name: Publish CPU Image
 
 on:
-  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  packages: write
+  contents: read
 
 jobs:
   push_to_registry:
     name: Build image
     runs-on: ubuntu-22.04
     if: ${{ github.repository_owner == 'nextcloud' }}
-    permissions:
-      packages: write
-      contents: read
     steps:
       - name: Set app env
         run: |
