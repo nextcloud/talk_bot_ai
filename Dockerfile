@@ -5,7 +5,7 @@ FROM python:3.12-slim-bookworm
 
 RUN \
   apt-get update && \
-  apt-get install -y curl && \
+  apt-get install -y curl procps && \
   apt-get autoclean
 
 # Download and install FRP client into /usr/local/bin.
