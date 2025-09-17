@@ -15,7 +15,7 @@ The bot is capable of answering questions in Nextcloud Talk chat conversations u
 
 **The [`AppAPI`](https://apps.nextcloud.com/apps/app_api), [Nextcloud Talk](https://apps.nextcloud.com/apps/spreed), and [Nextcloud Assistant](https://apps.nextcloud.com/apps/assistant) apps needs to be enabled to install and use this bot.**
 	]]></description>
-	<version>3.1.1</version>
+	<version>3.1.2</version>
 	<licence>agpl</licence>
 	<author mail="andrey18106x@gmail.com" homepage="https://github.com/andrey18106">Andrey Borysenko</author>
 	<author mail="bigcat88@icloud.com" homepage="https://github.com/bigcat88">Alexander Piskun</author>
@@ -34,7 +34,7 @@ The bot is capable of answering questions in Nextcloud Talk chat conversations u
 		<docker-install>
 			<registry>ghcr.io</registry>
 			<image>nextcloud/talk_bot_ai</image>
-			<image-tag>3.1.1</image-tag>
+			<image-tag>3.1.2</image-tag>
 		</docker-install>
 	</external-app>
 </info>
