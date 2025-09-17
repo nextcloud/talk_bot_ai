@@ -41,6 +41,9 @@ def ai_talk_bot_process_request(message: TalkBotMessage, nc: NextcloudApp):
     if prompt is None:
         return
 
+    user = message.actor_id.split("/", maxsplit=1)[1]
+    nc.set_user(user)
+
     params = {
         "input": {
             "input": prompt.group(1),
