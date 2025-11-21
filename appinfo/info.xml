@@ -28,7 +28,7 @@ The bot is capable of answering questions in Nextcloud Talk chat conversations u
 	<bugs>https://github.com/nextcloud/talk_bot_ai/issues</bugs>
 	<repository type="git">https://github.com/nextcloud/talk_bot_ai.git</repository>
 	<dependencies>
-		<nextcloud min-version="30" max-version="32"/>
+		<nextcloud min-version="30" max-version="33"/>
 	</dependencies>
 	<external-app>
 		<docker-install>
