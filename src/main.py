@@ -66,7 +66,8 @@ def ai_talk_bot_process_request(message: TalkBotMessage, nc: NextcloudApp):
 def message_handler(
     request: Request,
     reply_to: Annotated[int, Query(description="ID of message to reply to")],
-    token: Annotated[str, Query(description="Conversation token")]
+    token: Annotated[str, Query(description="Conversation token")],
+    nc: Annotated[NextcloudApp, Depends(nc_app)]
 ):
     body = asyncio.run(request.body())
     task = json.loads(body)["task"]
@@ -75,7 +76,14 @@ def message_handler(
     if status == "STATUS_FAILED":
         AI_BOT.send_message("ERROR: Failed to generate message, please try again later", reply_to, token=token)
     if status == "STATUS_SUCCESSFUL":
-        AI_BOT.send_message(task["output"]["output"] + AI_WATERMARK, reply_to, token=token)
+        # double-check that the user is still in the current conversation
+        try:
+            users = [p.actor_id for p in nc.talk.list_participants(token)]
+        except Exception as e:
+            users = []
+
+        if task["userId"] in users:
+            AI_BOT.send_message(task["output"]["output"] + AI_WATERMARK, reply_to, token=token)
 
     return responses.Response()
 
