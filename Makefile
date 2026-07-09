@@ -24,6 +24,7 @@ help:
 	@echo "  run31             installs $(APP_NAME) for Nextcloud 31"
 	@echo "  run32             installs $(APP_NAME) for Nextcloud 32"
 	@echo "  run33             installs $(APP_NAME) for Nextcloud 33"
+	@echo "  run34             installs $(APP_NAME) for Nextcloud 34"
 	@echo " "
 	@echo "  > Commands for manual registration of ExApp ($(APP_NAME) should be running!):"
 	@echo " "
@@ -32,6 +33,7 @@ help:
 	@echo "  register31        performs registration of running $(APP_NAME) into the 'manual_install' deploy daemon."
 	@echo "  register32        performs registration of running $(APP_NAME) into the 'manual_install' deploy daemon."
 	@echo "  register33        performs registration of running $(APP_NAME) into the 'manual_install' deploy daemon."
+	@echo "  register34        performs registration of running $(APP_NAME) into the 'manual_install' deploy daemon."
 	@echo " "
 
 
@@ -71,6 +73,12 @@ run33:
 	docker exec master-stable33-1 sudo -u www-data php occ app_api:app:register $(APP_ID) \
 		--info-xml https://raw.githubusercontent.com/nextcloud/$(APP_ID)/main/appinfo/info.xml
 
+.PHONY: run34
+run34:
+	docker exec master-stable34-1 sudo -u www-data php occ app_api:app:unregister $(APP_ID) --silent --force || true
+	docker exec master-stable34-1 sudo -u www-data php occ app_api:app:register $(APP_ID) \
+		--info-xml https://raw.githubusercontent.com/nextcloud/$(APP_ID)/main/appinfo/info.xml
+
 .PHONY: register
 register:
 	docker exec master-nextcloud-1 sudo -u www-data php occ app_api:app:unregister $(APP_ID) --silent --force || true
@@ -95,3 +103,8 @@ register32:
 register33:
 	docker exec master-stable33-1 sudo -u www-data php occ app_api:app:unregister $(APP_ID) --silent --force || true
 	docker exec master-stable33-1 sudo -u www-data php occ app_api:app:register $(APP_ID) manual_install --json-info $(JSON_INFO) --wait-finish
+
+.PHONY: register34
+register34:
+	docker exec master-stable34-1 sudo -u www-data php occ app_api:app:unregister $(APP_ID) --silent --force || true
+	docker exec master-stable34-1 sudo -u www-data php occ app_api:app:register $(APP_ID) manual_install --json-info $(JSON_INFO) --wait-finish
