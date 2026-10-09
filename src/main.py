@@ -83,7 +83,12 @@ def message_handler(
             users = []
 
         if task["userId"] in users:
-            AI_BOT.send_message(task["output"]["output"] + AI_WATERMARK, reply_to, token=token)
+            message = task["output"]["output"]
+
+            if ("includeWatermark" in task) and task["includeWatermark"]:
+                message += AI_WATERMARK
+
+            AI_BOT.send_message(message, reply_to, token=token)
 
     return responses.Response()
 
